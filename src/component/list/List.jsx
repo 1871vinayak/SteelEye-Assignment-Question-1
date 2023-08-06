@@ -6,7 +6,12 @@ import ListHeaderCell from "./ListHeaderCell";
 
 import styles from "./List.module.css";
 
-const List = ({ rows }) => {
+const List = ({
+  rows,
+  currency,
+  setSelectedOrderDetails,
+  setSelectedOrderTimeStamps,
+}) => {
   return (
     <table className={styles.container}>
       <thead>
@@ -19,13 +24,20 @@ const List = ({ rows }) => {
         </ListHeader>
       </thead>
       <tbody>
-        {rows.map((row) => (
-          <ListRow>
+        {/* Cannot add id as key as there is duplicacy */}
+        {rows.map((row, index) => (
+          <ListRow
+            key={index}
+            onClick={() => {
+              setSelectedOrderDetails(row.executionDetails);
+              setSelectedOrderTimeStamps(row.orderSubmitted);
+            }}
+          >
             <ListRowCell>{row["&id"]}</ListRowCell>
             <ListRowCell>{row.executionDetails.buySellIndicator}</ListRowCell>
             <ListRowCell>{row.executionDetails.orderStatus}</ListRowCell>
-            <ListRowCell>{row.orderSubmitted}</ListRowCell>
-            <ListRowCell>{row.bestExecutionData.orderVolume.USD}</ListRowCell>
+            <ListRowCell>{row.orderSubmitted.orderSubmitted}</ListRowCell>
+            <ListRowCell>{row.bestExecutionData.orderVolume[currency]}</ListRowCell>
           </ListRow>
         ))}
       </tbody>

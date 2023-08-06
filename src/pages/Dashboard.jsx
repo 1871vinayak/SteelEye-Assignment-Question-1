@@ -20,10 +20,26 @@ const Dashboard = () => {
   const [selectedOrderDetails, setSelectedOrderDetails] = useState({});
   const [selectedOrderTimeStamps, setSelectedOrderTimeStamps] = useState({});
 
+  //Converting into object with Key and Value pair where Key is ID itself, Value is the rest Data.
+
+  const obj = Object.fromEntries(
+    timestamps.results.map((value) => [[value["&id"]], [value.timestamps]])
+  );
+  const parsedRowData = mockData.results
+    .map((val) => ({
+      ...val,
+      orderSubmitted: obj[val["&id"]][0],
+    }))
+    .filter((row) => row["&id"]?.toLowerCase().includes(searchText ?? ""));
+
   return (
     <div>
       <div className={styles.header}>
-        <HeaderTitle primaryTitle="Orders" secondaryTitle="5 orders" />
+        {/* <HeaderTitle primaryTitle="Orders" secondaryTitle="5 orders" /> */}
+        <HeaderTitle
+          primaryTitle="Orders"
+          secondaryTitle={(parsedRowData ?? []).length}
+        />
         <div className={styles.actionBox}>
           <Search
             value={searchText}
@@ -38,16 +54,26 @@ const Dashboard = () => {
       </div>
       <div className={styles.content}>
         <div className={styles.section}>
+          <div className={styles.sectionl}>
           <Card
             cardData={selectedOrderDetails}
             title="Selected Order Details"
           />
+          </div>
+          <div className={styles.sectionr}>
           <Card
             cardData={selectedOrderTimeStamps}
             title="Selected Order Timestamps"
           />
+          </div>
         </div>
-        <List rows={mockData.results} />
+        {/* <List rows={mockData.results} /> */}
+        <List
+          rows={parsedRowData}
+          currency={currency}
+          setSelectedOrderDetails={setSelectedOrderDetails}
+          setSelectedOrderTimeStamps={setSelectedOrderTimeStamps}
+        />
       </div>
     </div>
   );

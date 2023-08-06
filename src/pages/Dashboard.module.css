@@ -22,7 +22,16 @@
 }
 
 .section {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   gap: 1em;
+}
+
+.sectionl {
+  width: 49.5%;
+  float: left;
+}
+.sectionr {
+  width: 49.5%;
+  float: right;
 }
